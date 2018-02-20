@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cr.ac.tec.ec.cldr.SetEventActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <TextView
+            android:id="@+id/setevent_txvSelDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="30sp" />
+
+        <TimePicker
+            android:id="@+id/setevent_tmeTimePicker"
+            android:layout_width="match_parent"
+            android:layout_height="340dp"
+            android:headerBackground="@color/colorPrimary"
+            android:numbersSelectorColor="@color/colorAccent" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/setevent_tilEventInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/setevent_etxActivityName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/name_of_activity"
+                android:textSize="24sp" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/setevent_tilActivityPlace"
+                android:layout_width="309dp"
+                android:layout_height="match_parent"
+                tools:layout_editor_absoluteY="81dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/setevent_etxActivityPlace"
+                    android:layout_width="258dp"
+                    android:layout_height="47dp"
+                    android:hint="@string/activity_place"
+                    android:textSize="18sp" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/setevent_fbtAddActivity"
+                android:layout_width="61dp"
+                android:layout_height="54dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                app:srcCompat="@android:drawable/ic_menu_add" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
