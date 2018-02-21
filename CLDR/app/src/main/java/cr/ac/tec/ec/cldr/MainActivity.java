@@ -3,7 +3,10 @@ package cr.ac.tec.ec.cldr;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -20,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSpinner();
+
 
         CalendarView calendarView=(CalendarView) findViewById(R.id.main_cldCalendar);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -78,6 +82,34 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_dropdown_item);
 
         main_spnSorter.setAdapter(orederByAdapter);
+        addListenerOnSpinner();
 
+    }
+
+    public void addListenerOnSpinner() {
+
+        final Spinner main_spnSorter;
+        main_spnSorter = (Spinner)findViewById(R.id.main_spnSorter);
+
+        
+        main_spnSorter.setOnItemSelectedListener(new Spinner.OnItemSelectedListener()
+        {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                Toast.makeText(MainActivity.this,
+                        "OnClickListener : " +
+                                "\nSpinner 1 : "+ String.valueOf(main_spnSorter.getSelectedItem()),
+                        Toast.LENGTH_SHORT).show();
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                if(selectedItem.equals("Add new category"))
+                {
+                    // do your stuff
+                }
+            } // to close the onItemSelected
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
     }
 }
