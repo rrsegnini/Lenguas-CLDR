@@ -27,6 +27,7 @@ public class SetEventActivity extends AppCompatActivity {
         int month = intent.getIntExtra("Month", 0);
         int day = intent.getIntExtra("Day", 0);
         int dayOfWeek = intent.getIntExtra("DayOfWeek", 0);
+        month++;
 
         String dayWeek = getDayOfTheWeek(dayOfWeek);
 

@@ -6,4 +6,5 @@
     <string name="title_notifications">Notifications</string>
     <string name="name_of_activity">Name of the activity</string>
     <string name="activity_place">Where is the activity?</string>
+    <string name="title_activity_main_by_name">MainByNameActivity</string>
 </resources>
