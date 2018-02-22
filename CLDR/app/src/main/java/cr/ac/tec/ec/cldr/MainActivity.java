@@ -91,6 +91,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Add a listener on the spinner to detect when an option is selected o changed.
+     */
     public void addListenerOnSpinner() {
 
         final Spinner main_spnSorter;
@@ -126,6 +129,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Updates the list that contains all the events added by the user, ordered by name.
+     */
     private void updateEventList(){
         ListView main_ltvEventList = findViewById(R.id.main_ltvEventList);
 
