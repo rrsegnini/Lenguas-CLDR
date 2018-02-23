@@ -1,6 +1,10 @@
 package cr.ac.tec.ec.cldr;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -14,13 +18,24 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.StringTokenizer;
+
+import domain.Event;
 
 public class MainActivity extends AppCompatActivity {
-    int selectedYear;
-    int selectedMonth;
-    int selectedDayOfMonth;
+    public static int selectedYear;
+    public static int selectedMonth;
+    public static int selectedDayOfMonth;
     private float initialX;
+    private SimpleDateFormat dateFormatMonth =
+            new SimpleDateFormat("MMMM- yyyy", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
         CalendarView calendarView=(CalendarView) findViewById(R.id.main_cldCalendar);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-
             @Override
             public void onSelectedDayChange(CalendarView calendarView, int year, int month,
                                             int dayOfMonth) {
@@ -64,9 +78,47 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        setListListener();
+
+
+        /*
+         CompactCalendarView calendarView= findViewById(R.id.main_cldCalendar);
+        calendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+            final ActionBar actionBar = getSupportActionBar();
+            //actionBar.setDisplayHomeAsUpEnabled(false);
+            //actionBar.setTitle(null);
+
+            @Override
+            public void onDayClick(Date dateClicked) {
+                Context context = getApplicationContext();
+
+                if (dateClicked.toString().compareTo("Fri Oct 21 00:00:00 AST 2016") == 0) {
+                    Toast.makeText(context, "Teachers' Professional Day", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(context, "No Events Planned for that day", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
+                actionBar.setTitle(dateFormatMonth.format(firstDayOfNewMonth));
+            }
+        });*/
+
     }
 
 
+    /**
+     * Returns the selected date
+     */
+    public static String getSelectedDate(){
+        return selectedYear + " " + selectedMonth + " " + selectedDayOfMonth;
+               // "EEE MMM dd hh:mm:ss 'GMT'Z yyyy"
+
+    }
     /**
      * Sets the options in the spinner widget.
      * The widget is used to select the sorting method of the events on the calendar.
@@ -133,12 +185,107 @@ public class MainActivity extends AppCompatActivity {
      * Updates the list that contains all the events added by the user, ordered by name.
      */
     private void updateEventList(){
+        data.File f = new data.File();
+
         ListView main_ltvEventList = findViewById(R.id.main_ltvEventList);
 
         ArrayAdapter eventsAdapter =
                 new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
+        List<Event> events = f.getEventsData();
+        //LoginActivity.mainObject.getEventList();
 
-        eventsAdapter.add("Elemento UNO");
+        for (int i =0; i < LoginActivity.mainObject.getEventList().size(); i++){
+            eventsAdapter.add(events.get(i).getId() + " - " + events.get(i).getName());
+            //eventsAdapter.add(events.get(i));
+        }
+
+
         main_ltvEventList.setAdapter(eventsAdapter);
+    }
+
+    /**
+     * Sets a listener on the items of the ListView.
+     */
+    private void setListListener(){
+        ListView main_liyByName = findViewById(R.id.main_ltvEventList);
+        main_liyByName.setOnItemClickListener(new ListView.OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                StringTokenizer st =
+                        new StringTokenizer(adapterView.getItemAtPosition(i).toString());
+
+                String id = st.nextToken();
+                Event clickedEvent = LoginActivity.mainObject.getEventById(Integer.parseInt(id));
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                builder.setTitle("Event information");
+                builder.setMessage(clickedEvent.getName() +
+                "\nPlace: " + clickedEvent.getPlace() +
+                "\nDatetime: " + clickedEvent.getDate().toString());
+
+                builder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing but close the dialog
+
+                        dialog.dismiss();
+                    }
+                });
+
+
+                AlertDialog alert = builder.create();
+                alert.show();;
+
+            }
+        });
+
+        main_liyByName.setOnItemLongClickListener(new ListView.OnItemLongClickListener(){
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final StringTokenizer st =
+                        new StringTokenizer(adapterView.getItemAtPosition(i).toString());
+
+                // Piece of code taken from
+                // https://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-on-android
+                // Submitted by user nikki on StackOverflow.
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                builder.setTitle("Confirm");
+                builder.setMessage("Do you want to delete the event?");
+
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                        String id = st.nextToken();
+                        Event clickedEvent =
+                                LoginActivity.mainObject.getEventById(Integer.parseInt(id));
+                        LoginActivity.mainObject.deleteEventById(Integer.parseInt(id));
+
+                        updateEventList();
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        // Do nothing
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+
+                return true;
+            }
+        });
     }
 }

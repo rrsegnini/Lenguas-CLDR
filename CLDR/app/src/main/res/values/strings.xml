@@ -7,4 +7,7 @@
     <string name="name_of_activity">Name of the activity</string>
     <string name="activity_place">Where is the activity?</string>
     <string name="title_activity_main_by_name">MainByNameActivity</string>
+    <string name="user_lbl">Email:</string>
+    <string name="psswrd_lbl">Password:</string>
+    <string name="title_activity_login">LoginActivity</string>
 </resources>

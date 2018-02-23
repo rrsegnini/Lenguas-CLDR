@@ -15,7 +15,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+
+import domain.Event;
 
 public class SetEventActivity extends AppCompatActivity {
 
@@ -110,19 +114,43 @@ public class SetEventActivity extends AppCompatActivity {
                 if(Build.VERSION.SDK_INT < 23){
                     int getHour = setevent_tmeTimePicker.getCurrentHour();
                     int getMinute = setevent_tmeTimePicker.getCurrentMinute();
-                    Toast.makeText(getApplicationContext(),"Hh"+setevent_etxActivityName.getText().toString(),
-                            Toast.LENGTH_SHORT);
+
                     try {
-                        Toast.makeText(getApplicationContext(),"Hh"+setevent_etxActivityName.getText(),
-                                Toast.LENGTH_SHORT);
-                        /*
-                        if (setevent_etxActivityName.getText().equals(null)
-                                && setevent_etxActivityPlace.getText().equals(null)) {
+
+                        if (setevent_etxActivityName.getText().toString().equals("")
+                                && setevent_etxActivityPlace.getText().toString().equals("")) {
                             throw new Exception("Missing values",
                                     new Throwable("Missing values"));
-                        }*/
+                        }else{
+
+                            Date dateFormat =
+                                    new Date();
+                            dateFormat.setHours(getHour);
+                            dateFormat.setMinutes(getMinute);
+                            dateFormat.setMonth(MainActivity.selectedMonth);
+                            dateFormat.setYear(MainActivity.selectedYear);
+                            dateFormat.setDate(MainActivity.selectedDayOfMonth);
+
+                            /*dateFormat.parse(MainActivity.getSelectedDate() + getHour + ":" + getMinute);*/
+
+                            domain.Event newEvent = new Event(dateFormat,
+                                    setevent_etxActivityName.getText().toString(),
+                                    setevent_etxActivityName.getText().toString(),
+                                    setevent_etxActivityPlace.getText().toString());
+
+                            LoginActivity.mainObject.addEventToList(newEvent);
+
+                            Toast.makeText(getApplicationContext(), "Event added succesfully",
+                                    Toast.LENGTH_LONG).show();
+
+                            Intent myIntent = new Intent(SetEventActivity.this,
+                                    MainActivity.class);
+
+                            SetEventActivity.this.startActivity(myIntent);
+
+                        }
                     }catch(Exception e){
-                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
 
                     }
 
