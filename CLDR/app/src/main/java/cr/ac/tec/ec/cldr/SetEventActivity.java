@@ -135,7 +135,7 @@ public class SetEventActivity extends AppCompatActivity {
 
                             domain.Event newEvent = new Event(dateFormat,
                                     setevent_etxActivityName.getText().toString(),
-                                    setevent_etxActivityName.getText().toString(),
+                                    LoginActivity.currentUser,
                                     setevent_etxActivityPlace.getText().toString());
 
                             LoginActivity.mainObject.addEventToList(newEvent);

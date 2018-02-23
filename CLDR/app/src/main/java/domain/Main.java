@@ -18,7 +18,11 @@ public class Main {
    List<Event> eventList = new ArrayList<>();
 
    public void addEventToList(Event e){
+       data.File f1 = new data.File();
+       eventList = f1.getEventsData();
+
        eventList.add(e);
+
        data.File f = new data.File(eventList, 0);
        f.saveEventData();
 
@@ -35,14 +39,36 @@ public class Main {
        return eventList;
    }
 
+    public List<User> getUserList(){
+        return usersList;
+    }
+
    public Event getEventById(int id){
+       data.File f = new data.File();
+       eventList = f.getEventsData();
+       try{
        for (int i = 0; i < eventList.size(); i++){
            if (eventList.get(i).getId() == id){
                return eventList.get(i);
            }
        }
+       }catch(Exception e){}
+
        return null;
    }
+
+    public User getUserByUsername(String id){
+        data.File f = new data.File();
+        this.usersList = f.getData();
+
+        for (int i = 0; i < usersList.size(); i++){
+            if (usersList.get(i).getUsername().equals(id)){
+                return usersList.get(i);
+            }
+        }
+        return null;
+    }
+
 
     public void deleteEventById(int id){
         for (int i = 0; i < eventList.size(); i++){

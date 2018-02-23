@@ -16,16 +16,16 @@ public class Event implements java.io.Serializable{
     private int id;
     private Date date;
     private String name;
-    private String descrp;
+    private String user;
     private String place;
 
-    public Event(Date date, String name, String descrp, String place) {
+    public Event(Date date, String name, String user, String place) {
         idGlobal++;
         this.id = idGlobal;
 
         this.date = date;
         this.name = name;
-        this.descrp = descrp;
+        this.user = user;
         this.place = place;
     }
     public int getId(){
@@ -47,12 +47,12 @@ public class Event implements java.io.Serializable{
         this.name = name;
     }
 
-    public String getDescrp() {
-        return descrp;
+    public String getUser() {
+        return user;
     }
 
     public void setDescrp(String descrp) {
-        this.descrp = descrp;
+        this.user = descrp;
     }
 
     public String getPlace() {

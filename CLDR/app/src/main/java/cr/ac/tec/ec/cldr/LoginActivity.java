@@ -12,7 +12,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
-    final static domain.Main mainObject = new domain.Main();
+    final static domain.Main mainObject = new domain.Main(); //It is used for administrative reasons
+    static String currentUser = "not_a_user"; //Keeps track of the current user
+    @Override
+    public void onBackPressed() {
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(getApplicationContext(), "Invalid username",
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -71,6 +77,9 @@ public class LoginActivity extends AppCompatActivity {
                         login_etxPss.getText().toString())){
                     Intent newIntent = new Intent(LoginActivity.this,
                             MainActivity.class);
+
+                    //Sets the user fot the session
+                    currentUser = login_etxEmail.getText().toString();
                     LoginActivity.this.startActivity(newIntent);
 
                 }else{

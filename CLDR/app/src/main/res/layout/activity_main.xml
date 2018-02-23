@@ -9,12 +9,42 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
-        <Spinner
-            android:id="@+id/main_spnSorter"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp" />
+            android:layout_height="56dp"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/main_spnSorter"
+                android:layout_width="276dp"
+                android:layout_height="70dp"
+                android:layout_weight="1" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/main_fabSettings"
+                android:layout_width="62dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                app:backgroundTint="@color/colorPrimary"
+                app:elevation="0dp"
+                app:srcCompat="@android:drawable/ic_menu_manage" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/main_fabLogOut"
+                android:layout_width="78dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                app:backgroundTint="@color/colorPrimaryDark"
+                app:elevation="0dp"
+                app:srcCompat="@android:drawable/ic_lock_power_off" />
+
+        </LinearLayout>
 
         <ViewFlipper
             android:id="@+id/main_vflOrderByViews"

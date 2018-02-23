@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
     private float initialX;
     private SimpleDateFormat dateFormatMonth =
             new SimpleDateFormat("MMMM- yyyy", Locale.getDefault());
+
+    public void onBackPressed() {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,31 +87,59 @@ public class MainActivity extends AppCompatActivity {
         setListListener();
 
 
-        /*
-         CompactCalendarView calendarView= findViewById(R.id.main_cldCalendar);
-        calendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
-            final ActionBar actionBar = getSupportActionBar();
-            //actionBar.setDisplayHomeAsUpEnabled(false);
-            //actionBar.setTitle(null);
+        FloatingActionButton main_fabSettings = findViewById(R.id.main_fabSettings);
+
+        main_fabSettings.setOnClickListener(new FloatingActionButton.OnClickListener(){
 
             @Override
-            public void onDayClick(Date dateClicked) {
-                Context context = getApplicationContext();
-
-                if (dateClicked.toString().compareTo("Fri Oct 21 00:00:00 AST 2016") == 0) {
-                    Toast.makeText(context, "Teachers' Professional Day", Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(context, "No Events Planned for that day", Toast.LENGTH_SHORT).show();
-                }
-
-
+            public void onClick(View view) {
+                Intent newIntent = new Intent(MainActivity.this,
+                        SettingsActivity.class);
+                newIntent.putExtra("User", LoginActivity.currentUser);
+                MainActivity.this.startActivity(newIntent);
             }
+        });
+
+
+        FloatingActionButton LogOut = findViewById(R.id.main_fabLogOut);
+        LogOut.setOnClickListener(new FloatingActionButton.OnClickListener(){
 
             @Override
-            public void onMonthScroll(Date firstDayOfNewMonth) {
-                actionBar.setTitle(dateFormatMonth.format(firstDayOfNewMonth));
+            public void onClick(View view) {
+
+
+                // Piece of code taken from
+                // https://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-on-android
+                // Submitted by user nikki on StackOverflow.
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                builder.setTitle("Confirm");
+                builder.setMessage("Are you sure you want to log out?");
+
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent newIntent = new Intent(MainActivity.this,
+                                LoginActivity.class);
+                        MainActivity.this.startActivity(newIntent);
+
+                    }
+                });
+
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        // Do nothing
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
             }
-        });*/
+        });
 
     }
 
@@ -194,9 +227,10 @@ public class MainActivity extends AppCompatActivity {
         List<Event> events = f.getEventsData();
         //LoginActivity.mainObject.getEventList();
 
-        for (int i =0; i < LoginActivity.mainObject.getEventList().size(); i++){
-            eventsAdapter.add(events.get(i).getId() + " - " + events.get(i).getName());
-            //eventsAdapter.add(events.get(i));
+        for (int i =0; i < events.size(); i++){
+            if (events.get(i).getUser().equals(LoginActivity.currentUser)) {
+                eventsAdapter.add(events.get(i).getId() + " - " + events.get(i).getName());
+            }
         }
 
 
@@ -265,6 +299,9 @@ public class MainActivity extends AppCompatActivity {
                         Event clickedEvent =
                                 LoginActivity.mainObject.getEventById(Integer.parseInt(id));
                         LoginActivity.mainObject.deleteEventById(Integer.parseInt(id));
+
+                        data.File f = new data.File(LoginActivity.mainObject.getEventList(),0);
+                        f.saveEventData();
 
                         updateEventList();
                         dialog.dismiss();
